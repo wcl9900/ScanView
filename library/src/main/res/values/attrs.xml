@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScanView">
+        <attr name="scanLineDrawable" format="reference"/>
+        <attr name="scanFrameDrawable" format="reference"/>
+
+        <attr name="scanLineHeight" format="dimension"/>
+
+        <attr name="duration" format="integer"/>
+
+        <attr name="framePadding" format="dimension"/>
+        <attr name="framePaddingLeft" format="dimension"/>
+        <attr name="framePaddingRight" format="dimension"/>
+        <attr name="framePaddingTop" format="dimension"/>
+        <attr name="framePaddingBottom" format="dimension"/>
+
+        <attr name="linePadding" format="dimension"/>
+        <attr name="linePaddingLeft" format="dimension"/>
+        <attr name="linePaddingRight" format="dimension"/>
+        <attr name="linePaddingTop" format="dimension"/>
+        <attr name="linePaddingBottom" format="dimension"/>
+
+        <attr name="lineHeightRatio" format="float"/>
+    </declare-styleable>
+</resources>
