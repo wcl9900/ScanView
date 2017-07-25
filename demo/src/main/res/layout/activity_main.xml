@@ -9,7 +9,7 @@
         android:layout_height="300dp"
         android:paddingTop="20dp"
         android:paddingBottom="26dp"
-        android:background="#9b9898"
+        android:background="#211e1e"
         android:layout_gravity="center_horizontal">
 
         <com.wcl.scanview.ScanView
@@ -17,10 +17,10 @@
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_gravity="center"
-            app:scanFrameDrawable="@drawable/icon_saomiaokuang"
-            app:scanLineDrawable="@drawable/icon_saomiaotiao"
-            app:lineHeightRatio="0.25"
-            app:duration="4000"
+            app:scanFrameDrawable="@drawable/icon_frame"
+            app:scanLineDrawable="@drawable/icon_line"
+            app:lineHeight="0.25"
+            app:duration="2500"
             app:linePadding="1dp"/>
     </FrameLayout>
 
@@ -36,41 +36,87 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_play"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="play"/>
-            <Button
-                android:id="@+id/btn_stop"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="stop"/>
-            <RadioGroup
-                android:id="@+id/rg_model"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <RadioButton
-                    android:id="@+id/rb1"
-                    android:layout_width="wrap_content"
+
+                <Button
+                    android:id="@+id/btn_play"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="小框"
                     android:layout_weight="1"
-                    android:checked="true"/>
-                <RadioButton
-                    android:id="@+id/rb2"
-                    android:layout_width="wrap_content"
+                    android:text="play"/>
+                <Button
+                    android:id="@+id/btn_stop"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:layout_weight="1"
-                    android:text="大框"/>
-            </RadioGroup>
-            <Button
-                android:id="@+id/btn_inter"
+                    android:text="stop"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="变更插值器"/>
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/rg_model"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/rb1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="小框"
+                        android:layout_weight="1"
+                        android:checked="true"/>
+                    <RadioButton
+                        android:id="@+id/rb2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:text="大框"/>
+                </RadioGroup>
+                <Spinner
+                    android:id="@+id/sp_inter"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:layout_gravity="center_vertical"
+                    android:text="自定义样式："/>
+                <Spinner
+                    android:id="@+id/sp_style"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="扫描线高度(0-1.0):"/>
+            <SeekBar
+                android:id="@+id/sb_line_height"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="0"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

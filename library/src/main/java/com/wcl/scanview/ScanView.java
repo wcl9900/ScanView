@@ -19,6 +19,9 @@ import android.view.animation.LinearInterpolator;
  */
 public class ScanView extends View implements ValueAnimator.AnimatorUpdateListener{
 
+	private static final int PLAY_STATE_PLAYING = 1;
+	private static final int PLAY_STATE_PAUSE = 2;
+
 	Drawable drawableLine;
 	Drawable drawableFrame;
 
@@ -32,12 +35,14 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	int framePaddingTop;
 	int framePaddingBottom;
 
-	float lineHeightRatio = 0.3f;
+	float lineHeight = 0.3f;
 
 	private ValueAnimator animatorLine;
 	private Interpolator interpolator;
 
 	private int duration = 2500;
+
+	int playState = PLAY_STATE_PLAYING;
 
 	public ScanView(Context context) {
 		super(context);
@@ -58,7 +63,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ScanView);
 		drawableLine = typedArray.getDrawable(R.styleable.ScanView_scanLineDrawable);
 		drawableFrame = typedArray.getDrawable(R.styleable.ScanView_scanFrameDrawable);
-		lineHeightRatio = typedArray.getFloat(R.styleable.ScanView_lineHeightRatio, lineHeightRatio);
+		lineHeight = typedArray.getFloat(R.styleable.ScanView_lineHeight, lineHeight);
 
 		framePaddingLeft = framePaddingRight = framePaddingTop = framePaddingBottom =
 				typedArray.getDimensionPixelSize(R.styleable.ScanView_framePadding, 0);
@@ -89,7 +94,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
      */
 	public void setDrawableLine(Drawable drawable){
 		this.drawableLine = drawable;
-		requestLayout();
+		setLinePadding(linePaddingLeft, linePaddingTop, linePaddingRight, linePaddingBottom);
 	}
 
 	/**
@@ -106,7 +111,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
      */
 	public void setDrawableFrame(Drawable drawable){
 		this.drawableFrame = drawable;
-		requestLayout();
+		setFramePadding(framePaddingLeft, framePaddingTop, framePaddingRight, framePaddingBottom);
 	}
 
 	/**
@@ -148,102 +153,76 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	}
 
 	/**
-	 * 设定扫描线占据的ScanView控件的高度比例
-	 * @param lineHeightRatio
+	 * lineHeight 0-1.0：设定扫描线占据的ScanView控件的高度比例
+	 * lineHeight >1.0：设定扫描线指定相对应的像素高度
+	 * @param lineHeight
      */
-	public void setLineHeightRatio(float lineHeightRatio) {
-		this.lineHeightRatio = lineHeightRatio;
-		requestLayout();
+	public void setLineHeight(float lineHeight) {
+		this.lineHeight = lineHeight;
+		setLinePadding(linePaddingLeft, linePaddingRight, linePaddingTop, linePaddingBottom);
 	}
 
-	public void setLinePadding(int linePadding) {
-		this.linePaddingLeft = linePadding;
-		this.linePaddingRight = linePadding;
-		this.linePaddingBottom = linePadding;
-		this.linePaddingTop = linePadding;
-		requestLayout();
+	public void setLinePadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+		this.linePaddingLeft = paddingLeft;
+		this.linePaddingRight = paddingRight;
+		this.linePaddingBottom = paddingBottom;
+		this.linePaddingTop = paddingTop;
+
+		if(drawableLine != null) {
+			int lineHeight;
+			if(this.lineHeight > 1){
+				lineHeight = (int) this.lineHeight;
+			}
+			else {
+				lineHeight = (int) (getMeasuredHeight() * this.lineHeight);
+			}
+			drawableLine.setBounds(new Rect(linePaddingLeft, linePaddingTop,
+					getMeasuredWidth() - linePaddingRight, lineHeight + linePaddingTop));
+			if(animatorLine != null){
+				animatorLine.setIntValues(
+						0, getMeasuredHeight() - linePaddingTop - linePaddingBottom + drawableLine.getBounds().height());
+			}
+		}
 	}
 
-	public void setLinePaddingLeft(int linePaddingLeft) {
-		this.linePaddingLeft = linePaddingLeft;
-		requestLayout();
-	}
-
-	public void setLinePaddingRight(int linePaddingRight) {
-		this.linePaddingRight = linePaddingRight;
-		requestLayout();
-	}
-
-	public void setLinePaddingTop(int linePaddingTop) {
-		this.linePaddingTop = linePaddingTop;
-		requestLayout();
-	}
-
-	public void setLinePaddingBottom(int linePaddingBottom) {
-		this.linePaddingBottom = linePaddingBottom;
-		requestLayout();
-	}
-
-	public void setFramePadding(int framePadding) {
-		this.framePaddingLeft = framePadding;
-		this.framePaddingRight = framePadding;
-		this.framePaddingBottom = framePadding;
-		this.framePaddingTop = framePadding;
-		requestLayout();
-	}
-
-	public void setFramePaddingLeft(int framePaddingLeft) {
-		this.framePaddingLeft = framePaddingLeft;
-		requestLayout();
-	}
-
-	public void setFramePaddingRight(int framePaddingRight) {
-		this.framePaddingRight = framePaddingRight;
-		requestLayout();
-	}
-
-	public void setFramePaddingTop(int framePaddingTop) {
-		this.framePaddingTop = framePaddingTop;
-		requestLayout();
-	}
-
-	public void setFramePaddingBottom(int framePaddingBottom) {
-		this.framePaddingBottom = framePaddingBottom;
-		requestLayout();
+	public void setFramePadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
+		this.framePaddingLeft = paddingLeft;
+		this.framePaddingRight = paddingRight;
+		this.framePaddingBottom = paddingBottom;
+		this.framePaddingTop = paddingTop;
+		if(drawableFrame != null) {
+			drawableFrame.setBounds(new Rect(framePaddingLeft, framePaddingTop,
+					getMeasuredWidth() - framePaddingRight, getMeasuredHeight() - framePaddingBottom));
+		}
 	}
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		int width = MeasureSpec.getSize(widthMeasureSpec);
-		int height = MeasureSpec.getSize(heightMeasureSpec);
-		int lineHeight = (int) (height * lineHeightRatio);
-		if(drawableLine != null) {
-			drawableLine.setBounds(new Rect(linePaddingLeft, linePaddingTop, width - linePaddingRight, lineHeight));
-		}
-		if(drawableFrame != null) {
-			drawableFrame.setBounds(new Rect(framePaddingLeft, framePaddingTop, width - framePaddingRight, height - framePaddingBottom));
-		}
+		setLinePadding(linePaddingLeft, linePaddingRight, linePaddingTop, linePaddingBottom);
+		setFramePadding(framePaddingLeft, framePaddingTop, framePaddingRight, framePaddingBottom);
 	}
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 
-		if(animatorLine != null){
-			animatorLine.cancel();
-			animatorLine = null;
+		if(changed) {
+			if (animatorLine != null) {
+				animatorLine.cancel();
+				animatorLine = null;
+			}
+
+			animatorLine = ValueAnimator.ofInt(
+					0, getMeasuredHeight() - linePaddingTop - linePaddingBottom + drawableLine.getBounds().height())
+					.setDuration(duration);
+			animatorLine.setRepeatMode(ValueAnimator.RESTART);
+			animatorLine.setRepeatCount(ValueAnimator.INFINITE);
+			animatorLine.setInterpolator(interpolator);
+			animatorLine.addUpdateListener(this);
+
+			play();
 		}
-
-		animatorLine = ValueAnimator.ofInt(
-				0, getMeasuredHeight() - linePaddingTop - linePaddingBottom + drawableLine.getBounds().height())
-				.setDuration(duration);
-		animatorLine.setRepeatMode(ValueAnimator.RESTART);
-		animatorLine.setRepeatCount(ValueAnimator.INFINITE);
-		animatorLine.setInterpolator(interpolator);
-		animatorLine.addUpdateListener(this);
-
-		play();
 	}
 
 	@Override
@@ -255,7 +234,12 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	 * 启动扫描
 	 */
 	public void play() {
-		if(!animatorLine.isRunning()){
+		startAnim();
+		playState = PLAY_STATE_PLAYING;
+	}
+
+	private void startAnim() {
+		if(animatorLine != null && !animatorLine.isRunning()){
 			animatorLine.start();
 		}
 	}
@@ -264,14 +248,33 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	 * 停止扫描
 	 */
 	public void stop(){
+		stopAnim();
+		playState = PLAY_STATE_PAUSE;
+	}
+
+	private void stopAnim() {
 		if(animatorLine != null){
 			animatorLine.end();
 		}
-		invalidate();
+	}
+
+	@Override
+	protected void onWindowVisibilityChanged(int visibility) {
+		super.onWindowVisibilityChanged(visibility);
+		if(visibility == VISIBLE){
+			if(playState == PLAY_STATE_PLAYING) {
+				startAnim();
+			}
+		}
+		else{
+			stopAnim();
+		}
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		if(drawableLine == null || drawableFrame == null) return;
+
 		canvas.save();
 		int transDis = 0;
 		if(animatorLine != null){

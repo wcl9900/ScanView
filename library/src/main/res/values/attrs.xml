@@ -20,6 +20,6 @@
         <attr name="linePaddingTop" format="dimension"/>
         <attr name="linePaddingBottom" format="dimension"/>
 
-        <attr name="lineHeightRatio" format="float"/>
+        <attr name="lineHeight" format="float"/>
     </declare-styleable>
 </resources>
