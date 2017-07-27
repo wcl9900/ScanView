@@ -1,14 +1,15 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 21
     buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 26
+        targetSdkVersion 11
         versionCode 1
-        versionName "1.0"
+        versionName version
     }
     buildTypes {
         release {
@@ -20,4 +21,19 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+android {
+    lintOptions {
+        abortOnError false
+    }
+}
+
+publish {
+    userOrg = 'wangchunlong'
+    groupId = 'com.wcl.scanview'
+    artifactId = 'scanview'
+    publishVersion = '1.0.0'
+    desc = 'Oh hi, this is a nice description for a project, right?'
+    website = 'https://github.com/wcl9900/ScanView'
 }

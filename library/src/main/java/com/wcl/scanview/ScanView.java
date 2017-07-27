@@ -91,7 +91,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 设定扫描条图片资源
 	 * @param drawable
-     */
+	 */
 	public void setDrawableLine(Drawable drawable){
 		this.drawableLine = drawable;
 		setLinePadding(linePaddingLeft, linePaddingTop, linePaddingRight, linePaddingBottom);
@@ -100,7 +100,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 设定扫描条图片资源
 	 * @param resId
-     */
+	 */
 	public void setDrawableLine(int resId){
 		setDrawableLine(getResources().getDrawable(resId));
 	}
@@ -108,7 +108,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 设定扫描框图片资源
 	 * @param drawable
-     */
+	 */
 	public void setDrawableFrame(Drawable drawable){
 		this.drawableFrame = drawable;
 		setFramePadding(framePaddingLeft, framePaddingTop, framePaddingRight, framePaddingBottom);
@@ -117,7 +117,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 设定扫描框图片资源
 	 * @param resId
-     */
+	 */
 	public void setDrawableFrame(int resId){
 		setDrawableFrame(getResources().getDrawable(resId));
 	}
@@ -125,7 +125,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 扫描条完成一次扫描所用的时间
 	 * @param duration
-     */
+	 */
 	public void setDuration(int duration) {
 		this.duration = duration;
 		if(animatorLine != null) {
@@ -136,7 +136,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	/**
 	 * 设定扫描条插值计算器
 	 * @param interpolator
-     */
+	 */
 	public void setInterpolator(Interpolator interpolator) {
 		this.interpolator = interpolator;
 		if(animatorLine != null) {
@@ -156,7 +156,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	 * lineHeight 0-1.0：设定扫描线占据的ScanView控件的高度比例
 	 * lineHeight >1.0：设定扫描线指定相对应的像素高度
 	 * @param lineHeight
-     */
+	 */
 	public void setLineHeight(float lineHeight) {
 		this.lineHeight = lineHeight;
 		setLinePadding(linePaddingLeft, linePaddingRight, linePaddingTop, linePaddingBottom);
