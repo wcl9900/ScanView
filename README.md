@@ -8,6 +8,10 @@
 ![name](https://github.com/wcl9900/ScanView/blob/95a8df11501bae77616e3757c8e9f35e5ff298d7/scanview.gif)
 
     **使用方式**
+    
+        引入库：
+        compile 'com.wcl.scanview:scanview:1.0.0'
+    
         1.创建,可通过xml布局创建，也可通过对象创建
         
         <com.wcl.scanview.ScanView
