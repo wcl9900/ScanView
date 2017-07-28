@@ -1,16 +1,19 @@
-    # ScanView
+# ScanView
 
     扫描视图控件，直接继承View自定义，渲染效率高，视图不可见动画自动停止等优化处理，可支持边框和扫描线的定制，支持图片，颜色，xml资源等模式的绘制
     API接口丰富，可控制扫描速度插值器，扫描时间，停止/播放
 
-    **效果图**
+**效果图**
     
-![name](https://github.com/wcl9900/ScanView/blob/95a8df11501bae77616e3757c8e9f35e5ff298d7/scanview.gif)
+  ![name](https://github.com/wcl9900/ScanView/blob/95a8df11501bae77616e3757c8e9f35e5ff298d7/scanview.gif)
 
-    **使用方式**
+**使用方式**
     
-        引入库：
-        compile 'com.wcl.scanview:scanview:1.0.0'
+    Gradle
+    repositories {
+        jcenter()
+    }
+    compile 'com.wcl.scanview:scanview:1.0.0'
     
         1.创建,可通过xml布局创建，也可通过对象创建
         
