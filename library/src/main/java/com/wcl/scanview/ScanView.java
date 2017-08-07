@@ -282,7 +282,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		}
 		Rect drawableLineBounds = drawableLine.getBounds();
 		canvas.clipRect(drawableLineBounds.left, drawableLineBounds.top, drawableLineBounds.right, getHeight() - drawableLineBounds.top);
-		canvas.translate(0, transDis - drawableLineBounds.height() + drawableLineBounds.top);
+		canvas.translate(0, transDis - drawableLineBounds.height());
 		drawableLine.draw(canvas);
 		canvas.restore();
 
