@@ -154,7 +154,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 
 	/**
 	 * lineHeight 0-1.0：设定扫描线占据的ScanView控件的高度比例
-	 * lineHeight >1.0：设定扫描线指定相对应的像素高度
+	 * lineHeight 大于1.0：设定扫描线指定相对应的像素高度
 	 * @param lineHeight
 	 */
 	public void setLineHeight(float lineHeight) {
