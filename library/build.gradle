@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-version = '1.0.2'
+def version = '1.0.2'
 
 android {
     compileSdkVersion 21
@@ -28,107 +28,21 @@ android {
     }
 }
 
-//发布 start
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+ext{
+    versionName = version//版本号
+    siteUrl = 'https://github.com/wcl9900/UnityAnnotation'    // project homepage
+    gitUrl = 'https://github.com/wcl9900/UnityAnnotation.git' // project git
 
-def siteUrl = 'https://github.com/wcl9900/ScanView'    // project homepage
-def gitUrl = 'https://github.com/wcl9900/ScanView.git' // project git
+    groupId = "com.wcl.scanview" //组名称
+    artifactId = "scanview"
 
-group = "com.wcl.scanview"
-def artifactId = "scanview"
+    repository = "maven"//仓库名称
+    userOrgName = "wangchunlong"//组织名称
 
-def repository = "maven"//仓库名称
-def packagingType = "jar"//jar、aar
-def userOrgName = "wangchunlong"//组织名称
-
-//库描述介绍
-def descRep = "扫描视图控件，直接继承View自定义，渲染效率高，视图不可见动画自动停止等优化处理，可支持边框和扫描线的定制，支持图片，颜色，xml资源等模式的绘制 API接口丰富，可控制扫描速度插值器，扫描时间，停止/播放"
-//库版本信息描述
-def descVersion = ""
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging packagingType
-                name artifactId
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'wcl99'
-                        name 'wangchunlong'
-                        email '990017809@163.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
+    //库描述介绍
+    descRep = "扫描视图控件，直接继承View自定义，渲染效率高，视图不可见动画自动停止等优化处理，" +
+            "可支持边框和扫描线的定制，支持图片，颜色，xml资源等模式的绘制 API接口丰富，可控制扫描速度插值器，扫描时间，停止/播放"
+    //库版本信息描述
+    descVersion = ""
 }
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-Properties properties = new Properties()
-boolean isHasFile = false
-if (project.rootProject.file('local.properties') != null){
-    isHasFile = true
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-}
-bintray {
-    user = isHasFile ? properties.getProperty("bintray.user") : System.getenv("bintray.user")
-    key = isHasFile ? properties.getProperty("bintray.apikey") : System.getenv("bintray.apikey")
-    configurations = ['archives']
-    pkg {
-        repo = repository
-        name = artifactId
-        userOrg = userOrgName
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-        publicDownloadNumbers = true
-        desc = descRep
-        version {
-//            name = '1.0'
-            desc = descVersion
-            released  = new Date()
-        }
-    }
-    javadoc { //jav doc采用utf-8编码否则会报“GBK的不可映射字符”错误
-        options {
-            encoding "UTF-8"
-            charSet 'UTF-8'
-        }
-    }
-}
-//发布 end
+apply from: 'https://raw.githubusercontent.com/wcl9900/jcenter/master/publishJCenter.gradle'
