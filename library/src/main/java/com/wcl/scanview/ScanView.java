@@ -159,7 +159,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	 */
 	public void setLineHeight(float lineHeight) {
 		this.lineHeight = lineHeight;
-		setLinePadding(linePaddingLeft, linePaddingRight, linePaddingTop, linePaddingBottom);
+		setLinePadding(linePaddingLeft, linePaddingTop, linePaddingRight, linePaddingBottom);
 	}
 
 	public void setLinePadding(int paddingLeft, int paddingTop, int paddingRight, int paddingBottom) {
@@ -199,7 +199,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		setLinePadding(linePaddingLeft, linePaddingRight, linePaddingTop, linePaddingBottom);
+		setLinePadding(linePaddingLeft, linePaddingTop, linePaddingRight, linePaddingBottom);
 		setFramePadding(framePaddingLeft, framePaddingTop, framePaddingRight, framePaddingBottom);
 	}
 
