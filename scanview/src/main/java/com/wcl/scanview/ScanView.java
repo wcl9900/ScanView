@@ -4,6 +4,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -25,17 +27,20 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	Drawable drawableLine;
 	Drawable drawableFrame;
 
+	int lineWidth = -1;
+	float lineHeight = 0.3f;
 	int linePaddingLeft;
 	int linePaddingRight;
 	int linePaddingTop;
 	int linePaddingBottom;
 
+	int frameWidth = -1;
+	int frameHeight = -1;
 	int framePaddingLeft;
 	int framePaddingRight;
 	int framePaddingTop;
 	int framePaddingBottom;
 
-	float lineHeight = 0.3f;
 
 	private ValueAnimator animatorLine;
 	private Interpolator interpolator;
@@ -43,6 +48,7 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 	private int duration = 2500;
 
 	int playState = PLAY_STATE_PLAYING;
+	private Paint paintDimBorder;
 
 	public ScanView(Context context) {
 		super(context);
@@ -63,7 +69,6 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ScanView);
 		drawableLine = typedArray.getDrawable(R.styleable.ScanView_scanLineDrawable);
 		drawableFrame = typedArray.getDrawable(R.styleable.ScanView_scanFrameDrawable);
-		lineHeight = typedArray.getFloat(R.styleable.ScanView_lineHeight, lineHeight);
 
 		framePaddingLeft = framePaddingRight = framePaddingTop = framePaddingBottom =
 				typedArray.getDimensionPixelSize(R.styleable.ScanView_framePadding, 0);
@@ -72,6 +77,9 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		framePaddingTop = typedArray.getDimensionPixelSize(R.styleable.ScanView_framePaddingTop, framePaddingTop);
 		framePaddingBottom = typedArray.getDimensionPixelSize(R.styleable.ScanView_framePaddingBottom, framePaddingBottom);
 
+		frameWidth = typedArray.getDimensionPixelSize(R.styleable.ScanView_frameWidth, frameWidth);
+		frameHeight = typedArray.getDimensionPixelSize(R.styleable.ScanView_frameHeight, frameHeight);
+
 		linePaddingLeft = linePaddingRight = linePaddingTop = linePaddingBottom =
 				typedArray.getDimensionPixelSize(R.styleable.ScanView_linePadding, 0);
 		linePaddingLeft = typedArray.getDimensionPixelSize(R.styleable.ScanView_linePaddingLeft, linePaddingLeft);
@@ -79,9 +87,16 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		linePaddingBottom = typedArray.getDimensionPixelSize(R.styleable.ScanView_linePaddingBottom, linePaddingBottom);
 		linePaddingTop = typedArray.getDimensionPixelSize(R.styleable.ScanView_linePaddingTop, linePaddingTop);
 
+		lineWidth = typedArray.getDimensionPixelSize(R.styleable.ScanView_lineWidth, lineWidth);
+		lineHeight = typedArray.getFloat(R.styleable.ScanView_lineHeight, lineHeight);
+
 		duration = typedArray.getInt(R.styleable.ScanView_duration, duration);
 
+		int dimBorderColor = typedArray.getColor(R.styleable.ScanView_dim_border, Color.TRANSPARENT);
 		typedArray.recycle();
+
+		paintDimBorder = new Paint();
+		paintDimBorder.setColor(dimBorderColor);
 	}
 
 	private void init(Context context){
@@ -176,6 +191,10 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 			else {
 				lineHeight = (int) (getMeasuredHeight() * this.lineHeight);
 			}
+			if(lineWidth != -1){
+				linePaddingLeft = (getMeasuredWidth() - lineWidth) / 2;
+				linePaddingRight = linePaddingLeft;
+			}
 			drawableLine.setBounds(new Rect(linePaddingLeft, linePaddingTop,
 					getMeasuredWidth() - linePaddingRight, lineHeight + linePaddingTop));
 			if(animatorLine != null){
@@ -191,6 +210,14 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		this.framePaddingBottom = paddingBottom;
 		this.framePaddingTop = paddingTop;
 		if(drawableFrame != null) {
+			if(frameWidth != -1){
+				framePaddingLeft = (getMeasuredWidth() - frameWidth) / 2;
+				framePaddingRight = framePaddingLeft;
+			}
+			if(frameHeight != -1){
+				framePaddingTop = (getMeasuredHeight() - frameHeight) / 2;
+				framePaddingBottom = framePaddingTop;
+			}
 			drawableFrame.setBounds(new Rect(framePaddingLeft, framePaddingTop,
 					getMeasuredWidth() - framePaddingRight, getMeasuredHeight() - framePaddingBottom));
 		}
@@ -280,15 +307,37 @@ public class ScanView extends View implements ValueAnimator.AnimatorUpdateListen
 		if(animatorLine != null){
 			transDis = (int) animatorLine.getAnimatedValue();
 		}
+
 		Rect drawableLineBounds = drawableLine.getBounds();
-		canvas.clipRect(drawableLineBounds.left, drawableLineBounds.top, drawableLineBounds.right, getHeight() - drawableLineBounds.top);
+		int clipLineTop = drawableLineBounds.top;
+		int clipLineBottom = getHeight() - drawableLineBounds.top;
+		if(frameHeight != -1){
+			clipLineTop = drawableFrame.getBounds().top;
+			clipLineBottom = drawableFrame.getBounds().bottom;
+		}
+		canvas.clipRect(drawableLineBounds.left, clipLineTop, drawableLineBounds.right, clipLineBottom);
 		canvas.translate(0, transDis - drawableLineBounds.height());
 		drawableLine.draw(canvas);
+
 		canvas.restore();
 
 		drawableFrame.draw(canvas);
 
+		drawDimBorder(canvas);
+
 		super.onDraw(canvas);
+	}
+
+	/**
+	 * 绘制边框区域颜色
+	 * @param canvas
+	 */
+	private void drawDimBorder(Canvas canvas) {
+		Rect drawableFrameBounds = drawableFrame.getBounds();
+		canvas.drawRect(0, 0, drawableFrameBounds.left, getHeight(), paintDimBorder);
+		canvas.drawRect(drawableFrameBounds.left, 0, drawableFrameBounds.right, drawableFrameBounds.top, paintDimBorder);
+		canvas.drawRect(drawableFrameBounds.right, 0, getWidth(), getHeight(), paintDimBorder);
+		canvas.drawRect(drawableFrameBounds.left, drawableFrameBounds.bottom, drawableFrameBounds.right, getHeight(), paintDimBorder);
 	}
 
 }

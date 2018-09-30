@@ -9,19 +9,24 @@
         android:layout_height="300dp"
         android:paddingTop="20dp"
         android:paddingBottom="26dp"
-        android:background="#211e1e"
+        android:background="#ffffff"
         android:layout_gravity="center_horizontal">
 
         <com.wcl.scanview.ScanView
             android:id="@+id/scanview"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
+            app:dim_border="#88000000"
             app:scanFrameDrawable="@drawable/icon_frame"
             app:scanLineDrawable="@drawable/icon_line"
+            app:frameWidth="180dp"
+            app:frameHeight="180dp"
+            app:lineWidth="180dp"
             app:lineHeight="0.25"
             app:duration="2500"
-            app:linePadding="1dp"/>
+            app:framePadding="10dp"
+            app:linePadding="10dp"/>
     </FrameLayout>
 
     <ScrollView

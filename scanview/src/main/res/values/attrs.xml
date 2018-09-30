@@ -8,18 +8,22 @@
 
         <attr name="duration" format="integer"/>
 
+        <attr name="frameWidth" format="dimension"/>
+        <attr name="frameHeight" format="dimension"/>
         <attr name="framePadding" format="dimension"/>
         <attr name="framePaddingLeft" format="dimension"/>
         <attr name="framePaddingRight" format="dimension"/>
         <attr name="framePaddingTop" format="dimension"/>
         <attr name="framePaddingBottom" format="dimension"/>
 
+        <attr name="lineWidth" format="dimension"/>
+        <attr name="lineHeight" format="float"/>
         <attr name="linePadding" format="dimension"/>
         <attr name="linePaddingLeft" format="dimension"/>
         <attr name="linePaddingRight" format="dimension"/>
         <attr name="linePaddingTop" format="dimension"/>
         <attr name="linePaddingBottom" format="dimension"/>
 
-        <attr name="lineHeight" format="float"/>
+        <attr name="dim_border" format="color"/>
     </declare-styleable>
 </resources>
