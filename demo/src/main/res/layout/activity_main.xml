@@ -23,7 +23,7 @@
             app:frameWidth="180dp"
             app:frameHeight="180dp"
             app:lineWidth="180dp"
-            app:lineHeight="0.25"
+            app:lineHeight="0.2"
             app:duration="2500"
             app:framePadding="10dp"
             app:linePadding="10dp"/>

@@ -17,7 +17,7 @@
         <attr name="framePaddingBottom" format="dimension"/>
 
         <attr name="lineWidth" format="dimension"/>
-        <attr name="lineHeight" format="float"/>
+        <attr name="lineHeight" format="float|dimension"/>
         <attr name="linePadding" format="dimension"/>
         <attr name="linePaddingLeft" format="dimension"/>
         <attr name="linePaddingRight" format="dimension"/>

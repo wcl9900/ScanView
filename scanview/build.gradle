@@ -3,10 +3,10 @@ apply plugin: 'com.android.library'
 def version = '1.0.4'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 26
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 14
+        targetSdkVersion 26
         versionCode 1
         versionName version
     }
