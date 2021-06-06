@@ -13,7 +13,7 @@
     repositories {
         jcenter()
     }
-    compile 'com.wcl.scanview:scanview:1.0.2'
+    cimplementation 'io.github.wcl9900:ScanView:1.0.4'
     
         1.创建,可通过xml布局创建，也可通过对象创建
         

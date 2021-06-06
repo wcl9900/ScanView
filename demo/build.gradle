@@ -21,6 +21,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile project(':scanview')
+//    implementation 'io.github.wcl9900:ScanView:1.0.4'
 }
 
 android {

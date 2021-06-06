@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-def version = '1.0.4'
+def _version = '1.0.4'
 
 android {
     compileSdkVersion 26
@@ -8,7 +8,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
-        versionName version
+        versionName _version
     }
     buildTypes {
         release {
@@ -28,21 +28,59 @@ android {
     }
 }
 
-ext{
-    versionName = version//版本号
-    siteUrl = 'https://github.com/wcl9900/UnityAnnotation'    // project homepage
-    gitUrl = 'https://github.com/wcl9900/UnityAnnotation.git' // project git
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-    groupId = "com.wcl.scanview" //组名称
-    artifactId = "scanview"
-
-    repository = "maven"//仓库名称
-    userOrgName = "wangchunlong"//组织名称
-
-    //库描述介绍
-    descRep = "扫描视图控件，直接继承View自定义，渲染效率高，视图不可见动画自动停止等优化处理，" +
-            "可支持边框和扫描线的定制，支持图片，颜色，xml资源等模式的绘制 API接口丰富，可控制扫描速度插值器，扫描时间，停止/播放"
-    //库版本信息描述
-    descVersion = ""
+signing {
+    sign configurations.archives
 }
-apply from: 'https://raw.githubusercontent.com/wcl9900/jcenter/master/publishJCenter.gradle'
+
+group = "io.github.wcl9900"
+archivesBaseName = "ScanView"
+version = _version
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
+            }
+
+            repository(url: "https://s01.oss.sonatype.org/content/repositories/releases/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'ScanView'
+                packaging 'aar'
+                description '二维码扫描框'
+                url 'https://github.com/wcl9900/ScanView'
+
+                scm {
+                    connection 'scm:git:https://github.com/wcl9900/ScanView.git'
+                    developerConnection 'scm:git:https://github.com/wcl9900/ScanView.git'
+                    url 'https://github.com/wcl9900/ScanView.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'wcl9900'
+                        name 'wangchunlong'
+                        email '990017809@qq.com'
+                    }
+                }
+            }
+        }
+    }
+}
